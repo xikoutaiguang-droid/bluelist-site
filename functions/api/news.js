@@ -1,5 +1,5 @@
 // 自動生成：news_build.py（直接書き換えない）
-const FEEDS = [{"name": "JFA公式", "url": "https://www.jfa.jp/samuraiblue/news/", "kind": "jfa", "all": true}, {"name": "サッカーキング", "url": "https://www.soccer-king.jp/feed", "kind": "rss"}, {"name": "サッカーキング", "url": "https://www.soccer-king.jp/RSS.rdf", "kind": "rss"}, {"name": "ゲキサカ", "url": "https://web.gekisaka.jp/feed", "kind": "rss"}, {"name": "ゲキサカ", "url": "https://web.gekisaka.jp/rss", "kind": "rss"}, {"name": "Football ZONE", "url": "https://www.football-zone.net/feed", "kind": "rss"}, {"name": "サッカーダイジェストWeb", "url": "https://www.soccerdigestweb.com/rss/", "kind": "rss"}];
+const FEEDS = [{"name": "JFA公式", "url": "https://www.jfa.jp/samuraiblue/news/", "kind": "jfa", "all": true}, {"name": "サッカーキング", "url": "https://www.soccer-king.jp/RSS.rdf", "kind": "rss"}, {"name": "ゲキサカ", "url": "https://web.gekisaka.jp/feed", "kind": "rss"}, {"name": "Football ZONE", "url": "https://www.football-zone.net/feed", "kind": "rss"}];
 const INCLUDE = new RegExp("日本代表|森保|サムライブルー|SAMURAI BLUE|A代表");
 const EXCLUDE = new RegExp("なでしこ|女子|U-?\\d{2}|フットサル|ビーチ|eスポーツ|ｅスポーツ|パラ|ブラインド|デフ");
 const UA = "Mozilla/5.0 (compatible; BLUELIST-news/1.0; +https://bluelist-jp.com/about)";
