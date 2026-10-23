@@ -17,7 +17,7 @@ const flg = (n, c) => { const k = (DB.flags || {})[n]; return k ? '<img class="f
     p.apps.forEach(x => { const m = M[x.matchId]; x.date = m.date; x.opponent = m.opponent; x.activityId = m.activityId; });
   });
 })();
-const AFF = {"rakuten_id": "", "amazon_tag": "", "dazn_url": "", "unext_url": "", "abema_url": "", "prime_url": ""};
+const AFF = {"rakuten_id": "", "amazon_tag": "", "dazn_url": "", "unext_url": "", "abema_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+D8WANE+4EKC+5YJRM", "prime_url": "", "xebio_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+E4G9PM+4ABU+5YJRM"};
 const SLUGS = DB.slugs || {p:{}, m:{}, a:{}};
 const OPP_SLUG = (DB.slugs && DB.slugs.o) || {};
 const TEAM = 'JPN';
@@ -290,7 +290,7 @@ function watchBtn(bc){
 }
 const extLink = (href, label, cls) => '<a class="' + (cls || '') + '" href="' + esc(href) + '" target="_blank" rel="sponsored noopener">' + label + '</a>';
 function shopBlock(q, title){
-  return '<div class="shop"><div class="btns">' + extLink(rakutenUrl(q), '楽天市場で探す', 'main') + extLink(amazonUrl(q), 'Amazonで探す') + '</div>' +
+  return '<div class="shop"><div class="btns">' + extLink(rakutenUrl(q), '楽天市場で探す', 'main') + extLink(amazonUrl(q), 'Amazonで探す') + (AFF.xebio_url ? extLink(AFF.xebio_url, 'ゼビオ公式通販') : '') + '</div>' +
     '<p>コピー品に注意。公式ストアか正規販売店の商品を選んでください。</p></div>';
 }
 /* グッズ一覧（appearances/goods.json：一番くじ・お菓子など小さなものまで） */
