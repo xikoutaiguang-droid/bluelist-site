@@ -15,7 +15,7 @@ export async function onRequestGet(ctx) {
   if (!s) return json({error: "unknown stadium"}, 404, "no-store");
   const app = ctx.env.RAKUTEN_APP_ID, key = ctx.env.RAKUTEN_ACCESS_KEY;
   if (!app || !key) return json({error: "not configured"}, 503, "no-store");
-  const cache = caches.default, ck = new Request(url.origin + "/api/hotels?s=" + url.searchParams.get("s") + "&v=2");
+  const cache = caches.default, ck = new Request(url.origin + "/api/hotels?s=" + url.searchParams.get("s") + "&v=3");
   const debug = url.searchParams.get("debug") === "1";
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const q = new URLSearchParams({applicationId: app, accessKey: key, format: "json", formatVersion: "2", datumType: "1",
@@ -36,7 +36,7 @@ export async function onRequestGet(ctx) {
   }
   const list = hotels.map(h => { const b = Array.isArray(h) ? (h[0] && (h[0].hotelBasicInfo || h[0])) : (h.hotelBasicInfo || h); return b; })
     .filter(b => b && b.hotelName).map(b => ({
-      name: b.hotelName, url: wrap(b.planListUrl || b.hotelInformationUrl), img: b.hotelThumbnailUrl || "",
+      name: b.hotelName, url: wrap(b.hotelNo ? "https://hotel.travel.rakuten.co.jp/hotelinfo/plan/" + b.hotelNo : (b.planListUrl || b.hotelInformationUrl)), img: b.hotelThumbnailUrl || "",
       min: b.hotelMinCharge || null, rev: b.reviewAverage || null, n: b.reviewCount || 0, st: b.nearestStation || "",
       km: (b.latitude && b.longitude) ? Math.round(dist(s[0], s[1], +b.latitude, +b.longitude) * 10) / 10 : null}));
   const top = (arr, f, g) => arr.filter(f).sort(g).slice(0, 5);
