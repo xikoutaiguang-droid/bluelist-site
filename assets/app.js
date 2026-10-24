@@ -346,7 +346,7 @@ function renderWatch(){
     '</div><p class="fine">コピー品に注意。公式ストアか正規販売店の商品を選んでください。</p></div>' +
     '<p class="fine adnote">「PR」の付いたリンクは広告（アフィリエイト）です。</p>';
   // チームシート上部の短い導線
-  const bb = '<a class="b1" href="schedule.html">試合の中継・配信</a>' +
+  const bb = '<a class="b1" href="schedule.html">中継・配信</a>' +
     '<a class="b2" href="#" data-go="shop">代表グッズを見る</a>';
   document.querySelectorAll('.buybar').forEach(el => { el.innerHTML = bb; });
 }
