@@ -15,21 +15,26 @@ export async function onRequestGet(ctx) {
   if (!s) return json({error: "unknown stadium"}, 404, "no-store");
   const app = ctx.env.RAKUTEN_APP_ID, key = ctx.env.RAKUTEN_ACCESS_KEY;
   if (!app || !key) return json({error: "not configured"}, 503, "no-store");
-  const cache = caches.default, ck = new Request(url.origin + "/api/hotels?s=" + url.searchParams.get("s") + "&v=1");
+  const cache = caches.default, ck = new Request(url.origin + "/api/hotels?s=" + url.searchParams.get("s") + "&v=2");
   const debug = url.searchParams.get("debug") === "1";
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const q = new URLSearchParams({applicationId: app, accessKey: key, format: "json", formatVersion: "2", datumType: "1",
     latitude: String(s[0]), longitude: String(s[1]), searchRadius: "3.0", hits: "30", sort: "standard", responseType: "small"});
   if (AFF_ID) q.set("affiliateId", AFF_ID);
+  const H = {headers: {"accessKey": key, "Referer": "https://bluelist-jp.com/", "Origin": "https://bluelist-jp.com", "User-Agent": "BLUELIST/1.0"}};
+  const API = "https://openapi.rakuten.co.jp/engine/api/Travel/SimpleHotelSearch/20260731?";
   let r, body;
-  try {
-    r = await fetch("https://openapi.rakuten.co.jp/engine/api/Travel/SimpleHotelSearch/20260731?" + q,
-      {headers: {"accessKey": key, "Referer": "https://bluelist-jp.com/", "Origin": "https://bluelist-jp.com", "User-Agent": "BLUELIST/1.0"}});
-    body = await r.text();
-  } catch (e) { return json({error: "fetch failed"}, 502, "no-store"); }
+  try { r = await fetch(API + q, H); body = await r.text(); } catch (e) { return json({error: "fetch failed"}, 502, "no-store"); }
   if (!r.ok) return json(debug ? {error: "api " + r.status, body: body.slice(0, 500)} : {error: "api " + r.status}, 502, "no-store");
   let d; try { d = JSON.parse(body); } catch (e) { return json({error: "bad json"}, 502, "no-store"); }
-  const list = (d.hotels || []).map(h => { const b = Array.isArray(h) ? (h[0] && (h[0].hotelBasicInfo || h[0])) : (h.hotelBasicInfo || h); return b; })
+  // 近い順に30件ずつ。宿の多い街なら3ページ（90件）まで見て、安い順・口コミ順の取りこぼしを減らす（1秒に1回まで）
+  const hotels = (d.hotels || []).slice();
+  const pages = Math.min((d.pagingInfo && d.pagingInfo.pageCount) || 1, 3);
+  for (let p = 2; p <= pages; p++) {
+    await new Promise(res => setTimeout(res, 1100));
+    try { q.set("page", String(p)); const rr = await fetch(API + q, H); if (!rr.ok) break; const dd = await rr.json(); hotels.push(...(dd.hotels || [])); } catch (e) { break; }
+  }
+  const list = hotels.map(h => { const b = Array.isArray(h) ? (h[0] && (h[0].hotelBasicInfo || h[0])) : (h.hotelBasicInfo || h); return b; })
     .filter(b => b && b.hotelName).map(b => ({
       name: b.hotelName, url: wrap(b.planListUrl || b.hotelInformationUrl), img: b.hotelThumbnailUrl || "",
       min: b.hotelMinCharge || null, rev: b.reviewAverage || null, n: b.reviewCount || 0, st: b.nearestStation || "",
