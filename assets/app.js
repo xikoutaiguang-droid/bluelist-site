@@ -17,7 +17,7 @@ const flg = (n, c) => { const k = (DB.flags || {})[n]; return k ? '<img class="f
     p.apps.forEach(x => { const m = M[x.matchId]; x.date = m.date; x.opponent = m.opponent; x.activityId = m.activityId; });
   });
 })();
-const AFF = {"rakuten_id": "564560c3.27ea07d7.564560c4.e8fc6b4c", "amazon_tag": "", "dazn_url": "", "unext_url": "", "abema_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+D8WANE+4EKC+5YJRM", "prime_url": "", "xebio_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+E4G9PM+4ABU+5YJRM"};
+const AFF = {"rakuten_id": "564560c3.27ea07d7.564560c4.e8fc6b4c", "amazon_tag": "", "dazn_url": "", "unext_url": "", "abema_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+D8WANE+4EKC+5YJRM", "prime_url": "", "xebio_url": "https://px.a8.net/svt/ejp?a8mat=4BENDO+E4G9PM+4ABU+5YJRM", "wowow_url": "https://h.accesstrade.net/sp/cc?rk=0100pjmj00p1cq", "wowow_px": "https://h.accesstrade.net/sp/rr?rk=0100pjmj00p1cq"};
 const SLUGS = DB.slugs || {p:{}, m:{}, a:{}};
 const OPP_SLUG = (DB.slugs && DB.slugs.o) || {};
 const TEAM = 'JPN';
