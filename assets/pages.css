@@ -612,6 +612,18 @@ td.recent{white-space:nowrap;font-size:12px}
 .shop a.btn+a.btn{background:transparent;color:var(--ink,#fff);box-shadow:inset 0 0 0 1px var(--line)}
 .shop.stay{gap:8px}.shop.stay a.btn{flex:1 1 140px;text-align:center}
 .stay-h{margin:14px 0 6px;font-size:14px}
+.shop.stay a.btn.plain{background:transparent;color:var(--ink,#fff);box-shadow:inset 0 0 0 1px var(--line)}
+.hlist{margin:10px 0 4px}.hlist .htabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px}
+.hlist .htabs button{font:inherit;font-size:13px;font-weight:800;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}
+.hlist .htabs button[aria-selected=true]{background:#bf0000;border-color:#bf0000;color:#fff}
+.hlist ol{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.hlist li{border-top:1px solid var(--line)}.hlist li:first-child{border-top:0}
+.hlist li a{display:flex;gap:10px;padding:10px 12px;color:inherit;text-decoration:none;align-items:center}
+.hlist img{width:64px;height:48px;object-fit:cover;border-radius:6px;flex:0 0 auto;background:#222}
+.hlist .hn{display:block;font-size:14px;font-weight:800;line-height:1.4}
+.hlist .hm{display:block;font-size:12px;opacity:.75;margin-top:2px}
+.hlist .hp{margin-left:auto;text-align:right;font-weight:900;white-space:nowrap;font-size:14px}
+.hlist .hp small{display:block;font-size:11px;font-weight:700;opacity:.7}
 a.inl{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:800;text-decoration:none;box-shadow:inset 0 0 0 1px var(--line);color:inherit}
 .calc{display:grid;gap:10px;padding:14px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line);margin:10px 0}
 .calc label{display:grid;gap:4px;font-size:13px;font-weight:800}
