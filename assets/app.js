@@ -288,6 +288,16 @@ function watchBtn(bc){
     .find(([k]) => bc.includes(k));
   return svc ? '<a class="btn watch" href="' + esc(svc[1]) + '" target="_blank" rel="sponsored noopener">▶ ' + esc(svc[0]) + 'で観る<span class="pr">PR</span></a>' : '';
 }
+const WATCH_SV = [['U-NEXT', 'unext_url', 'https://video.unext.jp/'], ['TVer', '', 'https://tver.jp/'], ['DAZN', 'dazn_url', 'https://www.dazn.com/ja-JP/welcome'], ['ABEMA', 'abema_url', 'https://abema.tv/'], ['Prime Video', 'prime_url', 'https://www.amazon.co.jp/primevideo']];
+function watchBtns(bc){
+  // 中継情報に名前が出てくる配信サービスだけ。広告リンクのときだけ PR を付ける
+  const hit = WATCH_SV.filter(s => bc && bc.includes(s[0]));
+  if (!hit.length) return '';
+  return '<div class="shop"><div class="btns">' + hit.map(([n, k, u]) => {
+    const aff = k && AFF[k];
+    return aff ? extLink(aff, n + 'を開く', 'main') + '<span class="pr">PR</span>' : '<a class="main" href="' + esc(u) + '" target="_blank" rel="noopener">' + n + 'を開く</a>';
+  }).join('') + '</div></div>';
+}
 const extLink = (href, label, cls) => '<a class="' + (cls || '') + '" href="' + esc(href) + '" target="_blank" rel="sponsored noopener">' + label + '</a>';
 function shopBlock(q, title){
   return '<div class="shop"><div class="btns">' + extLink(rakutenUrl(q), '楽天市場で探す', 'main') + extLink(amazonUrl(q), 'Amazonで探す') + (AFF.xebio_url ? extLink(AFF.xebio_url, 'ゼビオ公式通販') : '') + '</div>' +
@@ -314,10 +324,10 @@ function renderWatch(){
   const card = (title, sub, q, tag) => '<div class="gcard"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
     extLink(rakutenUrl(q), '楽天市場', 'main') + extLink(amazonUrl(q), 'Amazon') + '</div></div>';
   $('watch').innerHTML =
-    '<div class="sblock dazn"><h3>代表戦を観る<span class="pr">PR</span></h3>' +
+    '<div class="sblock dazn"><h3>代表戦を観る</h3>' +
       (nx ? '<p class="nx">次の代表戦：' + esc(nx.date.slice(5).replace('/', '月')) + '日 vs ' + esc(nx.opponent || '未定') + (nx.broadcast ? '<small>中継：' + esc(nx.broadcast) + '</small>' : '') + '</p>' : '') +
-      '<div class="shop"><div class="btns">' + extLink(daznUrl(), 'DAZNに登録する', 'main big') + '</div>' +
-      '<p>DAZNで配信される代表戦は、大会・試合によって違います。登録前にDAZNの配信予定を確認してください。</p></div></div>' +
+      watchBtns(nx && nx.broadcast) +
+      '<p class="fine">中継・配信は試合ごとに違います。<a href="schedule.html">これからの日程と中継</a></p></div>' +
     '<div class="sblock"><h3>日本代表のユニフォーム<span class="pr">PR</span></h3><div class="ggrid">' +
       card('ホーム ユニフォーム', '青の1st。レプリカとオーセンティックがある', 'サッカー日本代表 ユニフォーム ホーム') +
       card('アウェイ ユニフォーム', '白・2nd', 'サッカー日本代表 ユニフォーム アウェイ') +
@@ -336,7 +346,7 @@ function renderWatch(){
     '</div><p class="fine">コピー品に注意。公式ストアか正規販売店の商品を選んでください。</p></div>' +
     '<p class="fine adnote">「PR」の付いたリンクは広告（アフィリエイト）です。</p>';
   // チームシート上部の短い導線
-  const bb = '<span class="pr">PR</span>' + extLink(daznUrl(), 'DAZNで観る', 'b1') +
+  const bb = '<a class="b1" href="schedule.html">試合の中継・配信</a>' +
     '<a class="b2" href="#" data-go="shop">代表グッズを見る</a>';
   document.querySelectorAll('.buybar').forEach(el => { el.innerHTML = bb; });
 }
