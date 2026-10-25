@@ -5,7 +5,7 @@ export async function onRequestGet({ request }) {
   const all = url.searchParams.get("all") === "1";
   const days = parseInt(url.searchParams.get("days") || "0", 10);
   const cache = caches.default;
-  const ck = new Request(url.origin + "/api/indexnow?all=" + (all ? 1 : 0) + "&days=" + days);
+  const ck = new Request(url.origin + "/api/indexnow?v=2&all=" + (all ? 1 : 0) + "&days=" + days);
   const hit = await cache.match(ck);
   if (hit) return hit;
   const sm = await fetch(url.origin + "/sitemap.xml", { cf: { cacheTtl: 0 } }).then(r => r.text());
@@ -22,12 +22,16 @@ export async function onRequestGet({ request }) {
   const urls = list.map(x => x.loc).slice(0, 10000);
   let status = 0, body = "";
   if (urls.length) {
-    const r = await fetch("https://api.indexnow.org/indexnow", {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({ host: url.hostname, key: KEY, keyLocation: url.origin + "/" + KEY + ".txt", urlList: urls })
-    });
-    status = r.status; body = (await r.text()).slice(0, 300);
+    // 共通の窓口が混んでいる（429）ときは Bing の窓口に送る（どちらに送っても IndexNow 参加の検索エンジン全体に共有される）
+    for (const ep of ["https://www.bing.com/indexnow", "https://api.indexnow.org/indexnow", "https://yandex.com/indexnow"]) {
+      const r = await fetch(ep, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ host: url.hostname, key: KEY, keyLocation: url.origin + "/" + KEY + ".txt", urlList: urls })
+      });
+      status = r.status; body = ep + " " + (await r.text()).slice(0, 300);
+      if (status === 200 || status === 202) break;
+    }
   }
   const res = new Response(JSON.stringify({ sent: urls.length, status, body, sample: urls.slice(0, 5) }, null, 1), {
     headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300" }
