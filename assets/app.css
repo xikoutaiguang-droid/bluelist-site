@@ -272,6 +272,17 @@ h2.h{margin:0;justify-self:start;font-weight:900;font-size:clamp(20px,5vw,26px);
 .cutin.ga .ci{background:#2a0d12;box-shadow:0 6px 0 var(--red),0 -6px 0 #fff}
 .cutin.sub .ci{background:#fff;color:var(--navy);box-shadow:0 6px 0 var(--navy),0 -6px 0 var(--blue)}
 .cutin.ft .ci{background:var(--blue);box-shadow:0 6px 0 var(--navy),0 -6px 0 #fff}
+.cutin.pk{background:rgba(6,10,20,.55)}
+.pkbox{width:min(92%,420px);padding:14px 16px;border-radius:12px;background:var(--navy);color:var(--chalk);box-shadow:0 6px 0 var(--blue),0 -6px 0 #fff;font-weight:800}
+.pk-h{font-family:var(--f-num);font-size:22px;letter-spacing:.06em;margin-bottom:8px;text-align:center}
+.pk-r{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid rgba(255,255,255,.12)}
+.pk-t{flex:0 0 70px;display:flex;align-items:center;gap:4px;font-size:13px}
+.pk-d{flex:1;letter-spacing:.18em;font-size:18px}.pk-d i{font-style:normal}.pk-d .ok{color:#3ddc84}.pk-d .ng{color:#ff5a6e}.pk-d .yet{opacity:.35}
+.pk-r b{font-family:var(--f-num);font-size:26px;min-width:1.2em;text-align:right}
+.pk-l{margin-top:8px;font-size:14px;text-align:center;min-height:1.4em}.pk-l .ok{color:#3ddc84;font-style:normal}.pk-l .ng{color:#ff5a6e;font-style:normal}
+.pk-l strong{font-size:16px;color:var(--flash)}
+.clock .pkr{display:block;font-size:12px;color:var(--flash);font-weight:800;margin-top:2px}
+.mt .pkt{display:block;font-size:10px;font-weight:800;opacity:.85}
 .cutin.show .ci{animation:ciIn .38s cubic-bezier(.2,.9,.2,1) forwards}
 .cutin.hide .ci{animation:ciOut .32s cubic-bezier(.7,0,.8,.3) forwards}
 @keyframes ciIn{from{transform:translateX(-110%) skewY(-7deg);opacity:1}to{transform:translateX(0) skewY(-7deg);opacity:1}}

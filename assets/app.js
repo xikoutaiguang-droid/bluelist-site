@@ -398,7 +398,7 @@ function renderSheet(animate){
   $('next').disabled = cur === 0;
   document.querySelectorAll('.tick').forEach(x => x.setAttribute('aria-current', String(+x.dataset.i === cur)));
   $('mtabs').innerHTML = ms.length ? '<button class="mt" data-mi="-1" aria-pressed="' + (mi < 0) + '">活動全体<b>' + ms.length + '試合</b></button>' +
-    ms.map((m, i) => '<button class="mt" data-mi="' + i + '" aria-pressed="' + (mi === i) + '">' + esc(md(m.date)) + ' ' + esc(m.opponent) + '<b>' + m.gf + '-' + m.ga + '</b></button>').reverse().join('') : '';
+    ms.map((m, i) => '<button class="mt" data-mi="' + i + '" aria-pressed="' + (mi === i) + '">' + esc(md(m.date)) + ' ' + esc(m.opponent) + '<b>' + m.gf + '-' + m.ga + (m.pk ? '<small class="pkt">PK' + m.pk.jp + '-' + m.pk.op + '</small>' : '') + '</b></button>').reverse().join('') : '';
   if (mi < 0){ CUR_M = null; const mc = $('mclock'); if (mc) mc.remove(); renderActivity(a, ms); } else { t = 0; tf = 0; renderMatch(a, ms[mi]); }
   const pitch = $('pitch');
   pitch.classList.remove('swap');
@@ -587,12 +587,13 @@ function renderMatch(a, m){
 function drawClock(m){
   const len = m.length || 90;
   $('minute').value = Math.min(tf, len);
-  $('clock').textContent = t >= len ? '試合終了' : Math.floor(tf) + "'";
+  const pkOn = m.pk && t >= len && !busy;
+  $('clock').innerHTML = t >= len ? '試合終了' + (pkOn ? '<small class="pkr">PK ' + m.pk.jp + '-' + m.pk.op + (m.pk.win ? ' 日本の勝利' : ' 日本の敗退') + '</small>' : '') : Math.floor(tf) + "'";
   // ピッチ右上のスコアと試合時間（テレビ中継のスコア表示のように）
   const mc = ensureMC(m);
   const x = Math.min(tf, len), mm = Math.floor(x), ss = Math.floor((x - mm) * 60);
   mc.classList.toggle('on', playing && x < len);
-  mc.querySelector('small').textContent = x >= len ? '終了' : x === 0 && !playing ? '開始前' : x < 45 ? '前半' : (x === 45 && busy) ? 'HT' : x < 90 ? '後半' : '延長';
+  mc.querySelector('small').textContent = x >= len ? (pkOn ? 'PK' + m.pk.jp + '-' + m.pk.op : '終了') : x === 0 && !playing ? '開始前' : x < 45 ? '前半' : (x === 45 && busy) ? 'HT' : x < 90 ? '後半' : '延長';
   const cop = $('cs-op'); if (cop.dataset.n !== m.opponent){ cop.dataset.n = m.opponent; cop.innerHTML = abv(m.opponent); $('cs-jp').innerHTML = abv('日本'); }
   const tm = String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0');
   const tmh = tm.split('').map(ch => ch === ':' ? '<b class="col">:</b>' : '<b>' + ch + '</b>').join('');
@@ -869,7 +870,37 @@ async function kickOff(m, second){
 async function fullTime(m){
   const st = matchState(m, t);
   drawState(m, {animate: false});
-  await cutin('ft', '<span class="ci-big">FULL TIME</span><span class="ci-sub">日本 ' + (hasGoalData(m) ? st.jp + '-' + st.op : m.gf + '-' + m.ga) + ' ' + esc(m.opponent) + '</span>', 1300);
+  await cutin('ft', '<span class="ci-big">FULL TIME</span><span class="ci-sub">日本 ' + (hasGoalData(m) ? st.jp + '-' + st.op : m.gf + '-' + m.ga) + ' ' + esc(m.opponent) + (m.pk ? '　PK戦へ' : '') + '</span>', 1300);
+  if (m.pk) await pkShootout(m);
+}
+
+/* PK戦：蹴った順に1本ずつ。日本は選手名、相手は「○人目」（相手のキッカー名は記録していない） */
+async function pkShootout(m){
+  const my = token, c = $('cutin'), pk = m.pk, ks = pk.kicks || [];
+  const nm = id => ((BY_ID[id] || {}).name || '');
+  const row = (team, upto) => { const list = ks.slice(0, upto).filter(k => k.t === team);
+    return list.map(k => '<i class="' + (k.ok ? 'ok' : 'ng') + '">' + (k.ok ? '●' : '×') + '</i>').join('') + '<i class="yet">' + '○'.repeat(Math.max(0, 5 - list.length)) + '</i>'; };
+  const score = (upto) => { const s = {jp: 0, op: 0}; ks.slice(0, upto).forEach(k => { if (k.ok) s[k.t]++; }); return s; };
+  const draw = (upto, line) => { const s = score(upto);
+    c.className = 'cutin pk show'; c.innerHTML = '<div class="pkbox"><div class="pk-h">PK戦</div>' +
+      '<div class="pk-r"><span class="pk-t">' + abv('日本') + '</span><span class="pk-d">' + row('jp', upto) + '</span><b>' + s.jp + '</b></div>' +
+      '<div class="pk-r"><span class="pk-t">' + abv(m.opponent) + '</span><span class="pk-d">' + row('op', upto) + '</span><b>' + s.op + '</b></div>' +
+      '<div class="pk-l">' + line + '</div></div>'; };
+  draw(0, 'PK戦スタート');
+  await wait(REDUCED ? 300 : 900);
+  const n = {jp: 0, op: 0};
+  for (let i = 0; i < ks.length; i++){
+    if (my !== token) return;
+    const k = ks[i]; n[k.t]++;
+    const who = k.t === 'jp' ? '日本 ' + n.jp + '人目 ' + esc(nm(k.p)) : esc(m.opponent) + ' ' + n.op + '人目';
+    const res = k.ok ? '<em class="ok">成功</em>' : '<em class="ng">失敗</em>' + (k.save ? '（' + esc(nm(k.save)) + 'がセーブ）' : '');
+    draw(i + 1, who + '　' + res);
+    await wait(REDUCED ? 300 : (k.ok ? 950 : 1500));
+  }
+  if (my !== token) return;
+  draw(ks.length, '<strong>PK ' + pk.jp + '-' + pk.op + '　' + (pk.win ? '日本の勝利' : '日本の敗退') + '</strong>');
+  await wait(REDUCED ? 600 : 1800);
+  c.className = 'cutin'; c.innerHTML = '';
 }
 
 function step(now){
