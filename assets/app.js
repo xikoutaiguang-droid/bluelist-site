@@ -1622,4 +1622,4 @@ renderRails();
 (() => { const pid = new URLSearchParams(location.search).get('p'); if (pid && BY_ID[pid]) openPlayer(pid); })();
 renderFavs();
 renderMemo();
-{ const qv = new URLSearchParams(location.search).get('v'); const v = VIEWS[qv] ? qv : store.get('view', 'sheet'); if (VIEWS[v]) showView(v, true, true); }
+{ const qv = new URLSearchParams(location.search).get('v'); const v = VIEWS[qv] ? qv : 'sheet'; if (VIEWS[v]) showView(v, true, true); }   // 開いたときは常にホーム（?v=shop などの指定があるときだけそのタブ）
