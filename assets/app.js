@@ -182,7 +182,7 @@ function renderNext(){
         (next.venue ? '<br>' + esc(next.venue.split('（')[0]) : '') + (next.broadcast ? '<br>中継：' + esc(next.broadcast.split('／')[0].replace('全国ネット生中継', '')) : '') + '</p>' +
       '<div class="cd">' + (days === 0 ? '今日' : days) + '<small>' + (days === 0 ? '' : '日後') + '</small></div>' +
       '<div class="acts">' + (last ? '<button class="btn pri" type="button" data-goto="' + esc(last.id) + '">▶ 前回の' + esc(next.opponent) + '戦（' + last.gf + '-' + last.ga + '）を見る</button>' : '') +
-        watchBtn(next.broadcast) + (next.preview ? '<a class="btn sec" href="' + esc(next.preview) + '">見どころとデータ</a>' : '<a class="btn sec" href="schedule.html">日程と中継</a>') + '</div>';
+        watchBtn(next.broadcast) + (next.preview ? '<a class="btn sec" href="' + esc(next.preview) + '">見どころとデータ</a>' : '<a class="btn sec" href="schedule">日程と中継</a>') + '</div>';
   }
   if (fr){
     const prev = (INFO.fifa || []).slice(-2, -1)[0];
@@ -206,12 +206,12 @@ function renderRails(){
     '<div class="d">' + esc(m.date.replace(/\//g, '.')) + '</div><div class="o">vs ' + flg(m.opponent, 'sm') + esc(m.opponent) + '</div>' +
     '<div class="r">' + (m.result === '勝' ? '勝ち' : m.result === '敗' ? '負け' : '引き分け') + '</div><div class="s">' + m.gf + '-' + m.ga + '</div></button>').join('');
   $('rails').innerHTML =
-    '<div class="rail-head"><h3>最新のメンバー</h3><a class="more" href="players/index.html">選手一覧 →</a></div><div class="rail">' + ptiles + '</div>' +
-    '<div class="rail-head" style="margin-top:14px"><h3>直近の試合</h3><a class="more" href="matches/index.html">試合結果 →</a></div><div class="rail">' + mtiles + '</div>' +
+    '<div class="rail-head"><h3>最新のメンバー</h3><a class="more" href="players/">選手一覧 →</a></div><div class="rail">' + ptiles + '</div>' +
+    '<div class="rail-head" style="margin-top:14px"><h3>直近の試合</h3><a class="more" href="matches/">試合結果 →</a></div><div class="rail">' + mtiles + '</div>' +
     '<div class="rail-head" style="margin-top:14px"><h3>読みもの</h3><small>記録やデータを深掘り</small></div><div class="rail">' +
-    [['columns/index.html', 'コラム', 'データで読む日本代表'], ['formations.html', '布陣と組み合わせ', '3-4-2-1と4-2-3-1の相性'], ['clubs.html', 'クラブ別・国別', 'どこのクラブから呼ばれた？'], ['birthdays.html', '誕生日カレンダー', '月ごとの誕生日'], ['records.html', '記録集', '得点・アシスト・最年少'], ['numbers/index.html', '背番号の歴代', '10番は誰が付けた？'], ['opponents/index.html', '対戦国別の成績', '国ごとの勝敗と得点者'], ['fifa-ranking-world.html', '世界のFIFAランキング', '全211か国・地域の最新順位'], ['daily.html', '今日の代表選手当て', '毎日1人・6回以内に推理'], ['higher-lower.html', 'どっちが多い？', '記録を比べて連続正解'], ['quiz.html', '日本代表クイズ', '800問以上・称号が育つ'], ['goods.html', '代表グッズ一覧', '一番くじ・お菓子まで'],
-     ['clubs.html', '所属クラブ', '海外組の人数の推移'], ['fifa-ranking.html', '日本のFIFA順位', '順位の推移'], ['schedule.html', '試合日程', '次の代表戦と中継'],
-     ['players/index.html', '選手一覧', '招集された全員'], ['matches/index.html', '試合結果', 'スタメンと得点者']]
+    [['columns/', 'コラム', 'データで読む日本代表'], ['formations', '布陣と組み合わせ', '3-4-2-1と4-2-3-1の相性'], ['clubs', 'クラブ別・国別', 'どこのクラブから呼ばれた？'], ['birthdays', '誕生日カレンダー', '月ごとの誕生日'], ['records', '記録集', '得点・アシスト・最年少'], ['numbers/', '背番号の歴代', '10番は誰が付けた？'], ['opponents/', '対戦国別の成績', '国ごとの勝敗と得点者'], ['fifa-ranking-world', '世界のFIFAランキング', '全211か国・地域の最新順位'], ['daily', '今日の代表選手当て', '毎日1人・6回以内に推理'], ['higher-lower', 'どっちが多い？', '記録を比べて連続正解'], ['quiz', '日本代表クイズ', '800問以上・称号が育つ'], ['goods', '代表グッズ一覧', '一番くじ・お菓子まで'],
+     ['clubs', '所属クラブ', '海外組の人数の推移'], ['fifa-ranking', '日本のFIFA順位', '順位の推移'], ['schedule', '試合日程', '次の代表戦と中継'],
+     ['players/', '選手一覧', '招集された全員'], ['matches/', '試合結果', 'スタメンと得点者']]
       .map(x => '<a class="tile ltile" href="' + x[0] + '"><b>' + x[1] + '</b><small>' + x[2] + '</small></a>').join('') + '</div>';
 }
 // 試合へ飛ぶ（ヒーローのボタン・試合のカード）
@@ -267,7 +267,7 @@ function renderWorld(){
       '<li class="' + (r[2] === '日本' ? 'jp' : '') + '"><span class="r">' + r[0] + '</span><span class="mv">' + mv(r) + '</span><span class="t">' + flg(r[2]) + esc(r[2]) +
       (opp.has(r[2]) && r[2] !== '日本' ? '<i>対戦あり</i>' : '') + '</span><span class="c">' + CONF_JA[r[3]] + ' ' + inConf[r[2]] + '位</span><span class="p">' + (r[4] != null ? r[4].toFixed(2) : '') + '</span></li>').join('') + '</ol>' +
     (list.length > LIMIT ? '<button type="button" class="wmore" id="wmore">' + (wrAll ? '上位' + LIMIT + 'だけ表示' : 'すべて表示（' + list.length + '）') + '</button>' : '') +
-    '<p class="pagelink"><a href="fifa-ranking-world.html">世界のFIFAランキングのページ（検索つき）→</a></p>';
+    '<p class="pagelink"><a href="fifa-ranking-world">世界のFIFAランキングのページ（検索つき）→</a></p>';
   box.querySelectorAll('[data-wc]').forEach(b => b.addEventListener('click', () => { wrConf = b.dataset.wc; wrAll = false; renderWorld(); }));
   const more = $('wmore'); if (more) more.addEventListener('click', () => { wrAll = !wrAll; renderWorld(); });
 }
@@ -327,7 +327,7 @@ function renderWatch(){
     '<div class="sblock dazn"><h3>代表戦を観る</h3>' +
       (nx ? '<p class="nx">次の代表戦：' + esc(nx.date.slice(5).replace('/', '月')) + '日 vs ' + esc(nx.opponent || '未定') + (nx.broadcast ? '<small>中継：' + esc(nx.broadcast) + '</small>' : '') + '</p>' : '') +
       watchBtns(nx && nx.broadcast) +
-      '<p class="fine">中継・配信は試合ごとに違います。<a href="schedule.html">これからの日程と中継</a></p></div>' +
+      '<p class="fine">中継・配信は試合ごとに違います。<a href="schedule">これからの日程と中継</a></p></div>' +
     '<div class="sblock"><h3>日本代表のユニフォーム<span class="pr">PR</span></h3><div class="ggrid">' +
       card('ホーム ユニフォーム', '青の1st。レプリカとオーセンティックがある', 'サッカー日本代表 ユニフォーム ホーム') +
       card('アウェイ ユニフォーム', '白・2nd', 'サッカー日本代表 ユニフォーム アウェイ') +
@@ -346,7 +346,7 @@ function renderWatch(){
     '</div><p class="fine">コピー品に注意。公式ストアか正規販売店の商品を選んでください。</p></div>' +
     '<p class="fine adnote">「PR」の付いたリンクは広告（アフィリエイト）です。</p>';
   // チームシート上部の短い導線
-  const bb = '<a class="b1" href="schedule.html">中継・配信</a>' +
+  const bb = '<a class="b1" href="schedule">中継・配信</a>' +
     '<a class="b2" href="#" data-go="shop">代表グッズを見る</a>';
   document.querySelectorAll('.buybar').forEach(el => { el.innerHTML = bb; });
 }
@@ -688,7 +688,7 @@ function drawState(m, opt){
   $('under').innerHTML = '<div style="grid-column:1/-1"><h3>試合の流れ</h3><ul class="events">' +
     (ev.length ? ev.map(e => '<li data-min="' + e.min + '" class="' + (e.min <= t ? 'past' : 'future') + '"><span class="mi">' + e.min + "'</span><i class=\"ic " + e.kind + '"></i><span>' + e.text + '</span></li>').join('') : '<li class="none">記録された出来事はありません。</li>') +
     '</ul><p class="note-s" style="margin-top:8px">' + esc(m.venue || '') + '　' + esc(m.competition || '') +
-    (SLUGS.m[m.id] ? '　<a href="matches/' + SLUGS.m[m.id] + '.html">この試合の記録ページ</a>' : '') + '</p></div>';
+    (SLUGS.m[m.id] ? '　<a href="matches/' + SLUGS.m[m.id] + '">この試合の記録ページ</a>' : '') + '</p></div>';
 }
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -1084,13 +1084,13 @@ function quizHTML(){
     }).join('') + '</div>' +
     (ans != null ? '<p class="qr">' + (ok ? '正解！' : '残念。正解は「' + esc(Q.a) + '」') + (Q.note ? '　' + esc(Q.note) : '') +
       (Q.goto ? '　<button class="lk" data-goto="' + esc(Q.goto) + '">試合を見る</button>' : Q.pid ? '　<button class="lk" data-id="' + esc(Q.pid) + '">選手を見る</button>' : '') + '</p>' +
-      '<a class="xs" href="quiz.html">クイズ集でもっと解く（800問以上）→</a> ' +
+      '<a class="xs" href="quiz">クイズ集でもっと解く（800問以上）→</a> ' +
       '<a class="xs" target="_blank" rel="noopener" href="' + esc(xShare('BLUE LIST 今日の代表クイズ ' + (ok ? '正解！' : '不正解…') + (st.streak > 1 ? '（' + st.streak + '日連続）' : '') + '\n「' + Q.q + '」\n#BLUELIST #サッカー日本代表')) + '">結果をXでシェア</a>' : '') + '</div>';
 }
 function quizTitle(){
   if (!window.BLTitle) return '';
   const i = BLTitle.lvOf(BLTitle.xp());
-  return '<a class="qtl" href="quiz.html">' + BLTitle.emblem(i, 16) + '称号 ' + BLTitle.LV[i][1] + '</a>';
+  return '<a class="qtl" href="quiz">' + BLTitle.emblem(i, 16) + '称号 ' + BLTitle.LV[i][1] + '</a>';
 }
 function answerQuiz(c){
   const Q = buildQuiz(TD.key);
@@ -1488,7 +1488,7 @@ function openPlayer(id){
           '<div class="fig"><b>' + m.natGoals + '</b><small>得点</small></div>' +
           '<div class="fig"><b>' + m.natAssists + '</b><small>アシスト</small></div>' +
         '</div>' +
-        (SLUGS.p[p.id] ? '<p class="pagelink"><a href="players/' + SLUGS.p[p.id] + '.html">' + esc(p.name) + 'の招集歴・出場記録をすべて見る</a></p>' : '') +
+        (SLUGS.p[p.id] ? '<p class="pagelink"><a href="players/' + SLUGS.p[p.id] + '">' + esc(p.name) + 'の招集歴・出場記録をすべて見る</a></p>' : '') +
         (m.club.length ? '<h3 class="sec">クラブの直近5試合</h3>' + clubBlock : '') +
         '<h3 class="sec">' + esc(p.name) + 'のユニフォーム<span class="pr">PR</span></h3>' +
           shopBlock('日本代表 ユニフォーム ' + (m.number != null ? m.number + ' ' : '') + p.name,
@@ -1574,7 +1574,7 @@ function openTeam(name){
             '<div class="g">' + (jg.length ? '<b>日本</b> ' + jg.join('、') : '<b>日本</b> 得点なし') + (og.length ? '<br><b>' + esc(name) + '</b> ' + og.join('、') : '') + '</div>' +
             '<button class="go" type="button" data-go="' + esc(m.id) + '">この試合を再生 ▶</button></li>';
         }).join('') + '</ul>' +
-        (OPP_SLUG[name] ? '<p class="pagelink"><a href="opponents/' + OPP_SLUG[name] + '.html">' + esc(name) + 'との対戦成績のページを見る</a></p>' : '') +
+        (OPP_SLUG[name] ? '<p class="pagelink"><a href="opponents/' + OPP_SLUG[name] + '">' + esc(name) + 'との対戦成績のページを見る</a></p>' : '') +
         '<p class="how">2023年3月以降に収録しているA代表の試合だけを数えています。</p>' +
       '</div></div>';
   const close = () => { ov.remove(); document.removeEventListener('keydown', onKey); document.body.style.overflow = ''; if (lastFocus) lastFocus.focus(); };

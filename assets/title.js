@@ -29,9 +29,10 @@ window.addEventListener('storage',paint);
     var btn=document.querySelector('.ln-btn'),pn=document.getElementById('ln-panel');
     if(!btn||!pn)return;
     // いま見ているページに印を付ける
-    var here=location.pathname.replace(/\/$/,'/index.html');
+    function norm(p){return p.replace(/\.html$/,'').replace(/\/index$/,'/')}
+    var here=norm(location.pathname);
     pn.querySelectorAll('.ln-i').forEach(function(a){
-      try{var p=new URL(a.getAttribute('href'),location.href).pathname;if(p===here){a.classList.add('cur');a.setAttribute('aria-current','page')}}catch(e){}
+      try{var p=norm(new URL(a.getAttribute('href'),location.href).pathname);if(p===here){a.classList.add('cur');a.setAttribute('aria-current','page')}}catch(e){}
     });
     function place(){var r=btn.getBoundingClientRect();pn.style.top=Math.max(8,Math.round(r.bottom+8))+'px';pn.style.right=Math.max(12,Math.round(document.documentElement.clientWidth-r.right))+'px'}
     function open(){place();pn.hidden=false;btn.setAttribute('aria-expanded','true');var f=pn.querySelector('.ln-i');if(f)f.focus({preventScroll:true})}
