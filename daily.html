@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&display=swap">
 <link rel="stylesheet" href="assets/pages.css?v=956f0ae1cd">
-<script src="assets/title.js?v=420b1c472e" defer></script><script src="assets/news.js?v=bb816f6566" defer></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-SNEZHEC9BC"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-SNEZHEC9BC");</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9978665653036898" crossorigin="anonymous"></script>
+<script src="assets/title.js?v=420b1c472e" defer></script><script src="assets/news.js?v=bb816f6566" defer></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-SNEZHEC9BC"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-SNEZHEC9BC");window.blEv=function(n,p){try{gtag("event",n,p||{})}catch(e){}};document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href]");if(!a)return;var h=a.href||"",k=null;if(/sponsored/.test(a.rel||"")||/hb\.afl\.rakuten|px\.a8\.net|accesstrade\.net|amazon\.co\.jp|travel\.rakuten|tabelog\.com|dazn\.com|abema\.tv/.test(h))k="affiliate_click";else if(/(x|twitter)\.com\/intent|line\.me\/R\/msg|social-plugins\.line\.me|facebook\.com\/sharer/.test(h))k="share_click";if(!k)return;var d="";try{d=new URL(h).hostname}catch(x){}blEv(k,{link_domain:d,link_text:(a.textContent||"").trim().slice(0,40),link_url:h.slice(0,100)})},true);</script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9978665653036898" crossorigin="anonymous"></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "トップ", "item": "https://bluelist-jp.com/"}, {"@type": "ListItem", "position": 2, "name": "GAME", "item": "https://bluelist-jp.com/games"}, {"@type": "ListItem", "position": 3, "name": "今日の選手当て"}]}</script>
 </head><body>
 <header class="bar"><div class="wrap"><a class="mark" href="./"><img src="assets/logo-wordmark.svg" alt="BLUE LIST" height="28"></a><a class="tbadge" href="quiz" aria-label="クイズの称号"></a>
@@ -36,7 +36,7 @@ function cmp(g){const c=[];
  c.push(num('招集',g.calls,ans.calls,2,'回'));
  return c}
 function stats(){return S.get('wdlStats',{play:0,win:0,streak:0,best:0,last:'',dist:[0,0,0,0,0,0]})}
-function finish(win){over=true;save();if(mode!=='daily')return;const st=stats();if(st.last===KEY)return;st.play++;
+function finish(win){over=true;save();window.blEv&&blEv('game_finish',{game:mode==='daily'?'daily':'daily_free',result:win?'win':'lose'});if(mode!=='daily')return;const st=stats();if(st.last===KEY)return;st.play++;
  const y=new Date(now);y.setDate(y.getDate()-1);const YK=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();
  if(win){st.win++;st.streak=(st.last===YK&&st.lastWin)?st.streak+1:1;st.best=Math.max(st.best,st.streak);st.dist[tries.length-1]++;
   const q=S.get('quizXP',{xp:0,ans:0,best:{}});q.xp+=3;q.ans+=3;S.set('quizXP',q);if(window.BLTitle)BLTitle.paint()}
