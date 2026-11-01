@@ -277,6 +277,15 @@ function rakutenUrl(q){
   const u = 'https://search.rakuten.co.jp/search/mall/' + encodeURIComponent(q) + '/';
   return AFF.rakuten_id ? 'https://hb.afl.rakuten.co.jp/hgc/' + AFF.rakuten_id + '/?pc=' + encodeURIComponent(u) + '&m=' + encodeURIComponent(u) : u;
 }
+function rkAff(u){
+  return AFF.rakuten_id ? 'https://hb.afl.rakuten.co.jp/hgc/' + AFF.rakuten_id + '/?pc=' + encodeURIComponent(u) + '&m=' + encodeURIComponent(u) : u;
+}
+/* 楽天の商品画像＋楽天へのボタン（楽天ウェブサービスの規約：このまとまりの中に楽天以外のリンクを置かない） */
+function rkBox(rk, alt){
+  const u = rkAff(rk.u);
+  return '<div class="grk"><a class="grk-img" href="' + esc(u) + '" target="_blank" rel="sponsored noopener"><img src="' + esc(rk.img + '?_ex=200x200') + '" alt="' + esc(alt) + '" width="96" height="96" loading="lazy" decoding="async"></a>' +
+    '<a class="grk-btn" href="' + esc(u) + '" target="_blank" rel="sponsored noopener">楽天で見る</a><small>楽天市場の商品例<br>' + esc(rk.s) + '</small></div>';
+}
 function amazonUrl(q){
   return 'https://www.amazon.co.jp/s?k=' + encodeURIComponent(q) + (AFF.amazon_tag ? '&tag=' + encodeURIComponent(AFF.amazon_tag) : '');
 }
@@ -308,12 +317,15 @@ const GOODS_CATS = ['くじ・ガチャ', 'お菓子・食品', 'カード', '�
 function goodsHTML(){
   const G = DB.goods || []; if (!G.length) return '';
   return GOODS_CATS.filter(c => G.some(x => x.cat === c)).map(c =>
-    '<div class="sblock"><h3>' + esc(c) + '<span class="pr">PR</span></h3><div class="glist">' + G.filter(x => x.cat === c).map(x =>
-      '<div class="gitem"><div class="gt"><b>' + esc(x.name) + '</b>' + (x.status === '終了' ? '<span class="gs end">販売終了</span>' : x.status === '予約受付中' ? '<span class="gs">予約受付中</span>' : '') + '</div>' +
+    '<div class="sblock"><h3>' + esc(c) + '<span class="pr">PR</span></h3><div class="glist">' + G.filter(x => x.cat === c).map(x => {
+      const rk = x.status !== '終了' && x.rk;
+      const btns = (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">公式の紹介</a>' : '') +
+        (x.query ? (rk ? '' : extLink(rakutenUrl(x.query), '楽天', 'main')) + extLink(amazonUrl(x.query), 'Amazon') : '');
+      return '<div class="gitem' + (rk ? ' hasimg' : '') + '">' + (rk ? rkBox(rk, x.name) : '') + '<div class="gbody"><div class="gt"><b>' + esc(x.name) + '</b>' + (x.status === '終了' ? '<span class="gs end">販売終了</span>' : x.status === '予約受付中' ? '<span class="gs">予約受付中</span>' : '') + '</div>' +
       '<small>' + esc([x.maker, x.release ? x.release + '発売' : '', x.price].filter(Boolean).join('・')) + '</small>' +
       (x.where || x.note ? '<p>' + esc([x.where, x.note].filter(Boolean).join('。')) + '</p>' : '') +
-      '<div class="btns">' + (x.url ? '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">公式の紹介</a>' : '') +
-        (x.query ? extLink(rakutenUrl(x.query), '楽天', 'main') + extLink(amazonUrl(x.query), 'Amazon') : '') + '</div></div>').join('') + '</div></div>').join('');
+      '<div class="btns">' + btns + '</div></div></div>';
+    }).join('') + '</div></div>').join('');
 }
 function renderWatch(){
   // 次の代表戦（日程の先頭）と、直近の活動のメンバー（出場の多い順）
@@ -321,7 +333,11 @@ function renderWatch(){
   const lastSquad = squadOf(LAST.id).filter(x => !x.h.withdrawn)
     .map(x => ({p: x.p, no: x.h.number, n: (x.p.apps || []).length}))
     .sort((a, b) => b.n - a.n).slice(0, 12);
-  const card = (title, sub, q, tag) => '<div class="gcard"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
+  const RKG = i => ((DB.goods || []).find(x => x.rk && x.name === i) || {}).rk;
+  const card = (title, sub, q, rk) => rk ?
+    '<div class="gcard hasimg">' + rkBox(rk, title) + '<div class="gbody"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
+      extLink(rakutenUrl(q), '楽天でほかを探す') + extLink(amazonUrl(q), 'Amazon') + '</div></div></div>' :
+    '<div class="gcard"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
     extLink(rakutenUrl(q), '楽天市場', 'main') + extLink(amazonUrl(q), 'Amazon') + '</div></div>';
   $('watch').innerHTML =
     '<div class="sblock dazn"><h3>代表戦を観る</h3>' +
@@ -329,9 +345,9 @@ function renderWatch(){
       watchBtns(nx && nx.broadcast) +
       '<p class="fine">中継・配信は試合ごとに違います。<a href="schedule">これからの日程と中継</a></p></div>' +
     '<div class="sblock"><h3>日本代表のユニフォーム<span class="pr">PR</span></h3><div class="ggrid">' +
-      card('ホーム ユニフォーム', '青の1st。レプリカとオーセンティックがある', 'サッカー日本代表 ユニフォーム ホーム') +
-      card('アウェイ ユニフォーム', '白・2nd', 'サッカー日本代表 ユニフォーム アウェイ') +
-      card('キッズ ユニフォーム', '子ども用サイズ', 'サッカー日本代表 ユニフォーム キッズ') +
+      card('ホーム ユニフォーム', '青の1st。レプリカとオーセンティックがある', 'サッカー日本代表 ユニフォーム ホーム', RKG('アディダス サッカー日本代表 2026 ホーム レプリカ ユニフォーム 半袖')) +
+      card('アウェイ ユニフォーム', '白・2nd', 'サッカー日本代表 ユニフォーム アウェイ', RKG('アディダス サッカー日本代表 2026 アウェイ レプリカ ユニフォーム')) +
+      card('キッズ ユニフォーム', '子ども用サイズ', 'サッカー日本代表 ユニフォーム キッズ', RKG('アディダス サッカー日本代表 2026 ホーム キッズ レプリカ ユニフォーム')) +
       card('トレーニングウェア', 'ジャージ・プラクティスシャツ', 'サッカー日本代表 トレーニングウェア') +
     '</div></div>' +
     '<div class="sblock"><h3>選手の名前と背番号入り<span class="pr">PR</span></h3><p class="lead3">' + esc(LAST.name) + 'のメンバーから</p><div class="pchips">' +
@@ -344,7 +360,7 @@ function renderWatch(){
       card('キャップ・ニット帽', '', 'サッカー日本代表 キャップ') +
       card('応援フラッグ', '', 'サッカー日本代表 フラッグ 応援') +
     '</div><p class="fine">コピー品に注意。公式ストアか正規販売店の商品を選んでください。</p></div>' +
-    '<p class="fine adnote">「PR」の付いたリンクは広告（アフィリエイト）です。</p>';
+    '<p class="fine adnote">「PR」の付いたリンクは広告（アフィリエイト）です。画像は楽天市場で見つかった同じ商品の出品例です（商品画像：Supported by Rakuten Developers）。</p>';
   // チームシート上部の短い導線
   const bb = '<a class="b1" href="schedule">中継・配信</a>' +
     '<a class="b2" href="#" data-go="shop">代表グッズを見る</a>';
