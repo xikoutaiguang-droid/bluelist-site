@@ -764,7 +764,7 @@ footer{border-top-color:var(--line)}
 .sblock.dazn{padding:16px;border-radius:12px;background:linear-gradient(135deg,#1b1d22,#0c0e13);box-shadow:inset 0 0 0 1px var(--line)}
 .shop a.big{font-size:16px;padding:12px 22px;text-decoration:none;background:#f8f8f5;color:#0c0e13;border-radius:999px}
 .ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
-.gcard.hasimg,.gitem.hasimg{display:flex;gap:12px;align-items:flex-start}.grk{flex:0 0 100px;display:flex;flex-direction:column;gap:6px;text-align:center}
+.gitem.hasimg{display:flex;gap:12px;align-items:flex-start}.gcard.hasimg{display:grid;gap:8px;align-content:start}.gcard.hasimg .grk{flex:none}.gcard .btns{flex-wrap:wrap}.grk{flex:0 0 100px;display:flex;flex-direction:column;gap:6px;text-align:center}
 .grk-img img{display:block;width:96px;height:96px;object-fit:contain;margin:0 auto;background:#fff;border-radius:6px}
 .grk-btn{display:block;text-decoration:none;font-size:12px;font-weight:800;padding:7px 4px;border-radius:8px;background:#bf0000;color:#fff;white-space:nowrap}
 .grk small{font-size:10px;color:var(--sub);line-height:1.3}.gbody{flex:1;min-width:0;display:grid;gap:4px;align-content:start}

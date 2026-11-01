@@ -336,7 +336,7 @@ function renderWatch(){
   const RKG = i => ((DB.goods || []).find(x => x.rk && x.name === i) || {}).rk;
   const card = (title, sub, q, rk) => rk ?
     '<div class="gcard hasimg">' + rkBox(rk, title) + '<div class="gbody"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
-      extLink(rakutenUrl(q), '楽天でほかを探す') + extLink(amazonUrl(q), 'Amazon') + '</div></div></div>' :
+      extLink(rakutenUrl(q), '楽天で探す') + extLink(amazonUrl(q), 'Amazon') + '</div></div></div>' :
     '<div class="gcard"><b>' + title + '</b><small>' + sub + '</small><div class="btns">' +
     extLink(rakutenUrl(q), '楽天市場', 'main') + extLink(amazonUrl(q), 'Amazon') + '</div></div>';
   $('watch').innerHTML =
