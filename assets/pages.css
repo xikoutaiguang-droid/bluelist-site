@@ -563,6 +563,10 @@ td.recent{white-space:nowrap;font-size:12px}
 .pv-cd{margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:linear-gradient(90deg,#5a2433,#13161d);color:#fff;font-weight:800;font-size:14px}
 .pv-cd b{font-family:var(--f-num);font-size:26px;margin:0 2px}
 .pv-w{margin:4px 8px 4px 0}.pv-w .pr{font-size:10px;margin-left:6px;border:1px solid currentColor;border-radius:3px;padding:0 4px}
+.pv-lu{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.pv-lu li{padding:7px 10px;border-radius:8px;background:#13161d;font-size:14px;font-weight:700}
+.pv-day{margin:16px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px}
+.pv-day ol{margin:8px 0;padding-left:1.4em}.pv-day li{margin:4px 0;font-size:14px}
 .pv-form{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:4px}
 .pv-form li{padding:7px 10px;border-radius:8px;background:#13161d;border-left:4px solid #4a5570;font-size:14px}
 .pv-form li.w{border-left-color:#2fb267}.pv-form li.l{border-left-color:#e3263f}
