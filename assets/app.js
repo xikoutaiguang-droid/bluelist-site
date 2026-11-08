@@ -182,7 +182,7 @@ function renderNext(){
         (next.venue ? '<br>' + esc(next.venue.split('（')[0]) : '') + (next.broadcast ? '<br>中継：' + esc(next.broadcast.split('／')[0].replace('全国ネット生中継', '')) : '') + '</p>' +
       '<div class="cd">' + (days === 0 ? '今日' : days) + '<small>' + (days === 0 ? '' : '日後') + '</small></div>' +
       '<div class="acts">' + (last ? '<button class="btn pri" type="button" data-goto="' + esc(last.id) + '">▶ 前回の' + esc(next.opponent) + '戦（' + last.gf + '-' + last.ga + '）を見る</button>' : '') +
-        watchBtn(next.broadcast) + (next.preview ? '<a class="btn sec" href="' + esc(next.preview) + '">見どころとデータ</a>' : '<a class="btn sec" href="schedule">日程と中継</a>') + '</div>';
+        watchBtn(next.broadcast) + (next.preview ? '<a class="btn sec" href="' + esc(next.preview) + '#vote">勝敗を予想する</a><a class="btn sec" href="' + esc(next.preview) + '">見どころとデータ</a>' : '<a class="btn sec" href="schedule">日程と中継</a>') + '</div>';
   }
   if (fr){
     const prev = (INFO.fifa || []).slice(-2, -1)[0];
