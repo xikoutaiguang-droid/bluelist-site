@@ -1,0 +1,19 @@
+# 公開リポジトリ bluelist-site の .github/workflows/indexnow.yml
+# main に push されたら、Cloudflare Pages の公開を待ってから IndexNow に更新を知らせる（PCなしで動く）
+name: IndexNow
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Cloudflare Pages deploy
+        run: sleep 120
+      - name: Notify IndexNow (pages updated in the last 2 days)
+        run: |
+          for i in 1 2 3; do
+            out=$(curl -sS --max-time 60 "https://bluelist-jp.com/api/indexnow?days=2") && echo "$out" && break
+            sleep 60
+          done
