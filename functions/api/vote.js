@@ -1,5 +1,5 @@
 // 自動生成：vote_build.py（直接書き換えない）
-const POLLS = {"pred-2026-11-14-brazil": {"close": "2026-11-14T19:15:00+09:00", "options": ["win", "draw", "lose"]}, "pred-2026-11-17-paraguay": {"close": "2026-11-17T22:10:00+09:00", "options": ["win", "draw", "lose"]}};
+const POLLS = {"mom-2026-11-14-brazil": {"close": "2026-11-22T00:00:00+09:00", "options": ["zion-suzuki", "hiroki-machida", "hiroki-ito", "ayumu-seko", "yuto-nakano", "daichi-kamada", "ritsu-doan", "ao-tanaka", "keito-nakamura", "takefusa-kubo", "daizen-maeda", "ko-itakura", "yukinari-sugawara", "junnosuke-suzuki", "junya-ito", "takumi-minamino", "kaishu-sano", "kodai-sano", "tatsuhiro-sakamoto", "koki-ogawa"]}, "pred-2026-11-14-brazil": {"close": "2026-11-14T19:15:00+09:00", "options": ["win", "draw", "lose"]}, "pred-2026-11-17-paraguay": {"close": "2026-11-17T22:10:00+09:00", "options": ["win", "draw", "lose"]}};
 const json = (o, s = 200) => new Response(JSON.stringify(o), {status: s, headers: {"content-type": "application/json; charset=utf-8", "cache-control": "no-store"}});
 
 async function hash(s) {
